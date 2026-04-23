@@ -1,18 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seberapa Guna Lu Hari Ini?</title>
+
+<style>
+body {
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#020617,#0f172a);
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.container {
+  width:90%;
+  max-width:420px;
+  text-align:center;
+}
+
+h1 { font-size:26px; }
+p { opacity:0.8; }
+
+button {
+  padding:12px 18px;
+  margin-top:15px;
+  border:none;
+  border-radius:12px;
+  background:#22c55e;
+  color:black;
+  font-weight:bold;
+  width:100%;
+}
+
+select, input[type=checkbox] {
+  margin:5px;
+}
+
+.card {
+  background:#111827;
+  padding:20px;
+  border-radius:16px;
+  margin-top:15px;
+}
+
+.hidden { display:none; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- LANDING -->
+<div id="landing">
+  <h1>Seberapa Guna Lu Hari Ini?</h1>
+  <p>Jawab jujur. Kita nilai hidup lu hari ini 😈</p>
+  <button onclick="start()">Mulai</button>
+</div>
+
+<!-- INPUT -->
+<div id="input" class="hidden">
+
+<div class="card">
+<p>Lu bangun kapan?</p>
+<select id="bangun">
+  <option value="20">🌅 Pagi (niat hidup)</option>
+  <option value="10">☀️ Siang (ya gitu lah)</option>
+  <option value="0">🌙 Malam (fix kacau)</option>
+</select>
+</div>
+
+<div class="card">
+<p>🌅 Pagi lu ngapain?</p>
+<label><input type="checkbox" value="5"> ☕ ngopi doang</label><br>
+<label><input type="checkbox" value="-5"> 😴 lanjut tidur</label><br>
+<label><input type="checkbox" value="15"> 💻 kerja bentar</label><br>
+<label><input type="checkbox" value="-10"> 📱 scroll</label><br>
+<label><input type="checkbox" value="10"> 🏃 sok olahraga</label>
+</div>
+
+<div class="card">
+<p>☀️ Siang?</p>
+<label><input type="checkbox" value="-5"> 🍜 makan + rebahan</label><br>
+<label><input type="checkbox" value="20"> 💻 kerja serius</label><br>
+<label><input type="checkbox" value="-10"> 📱 scroll lagi</label><br>
+<label><input type="checkbox" value="0"> 😵 bingung hidup</label><br>
+<label><input type="checkbox" value="-5"> 🧠 pura-pura sibuk</label>
+</div>
+
+<div class="card">
+<p>🌙 Malam?</p>
+<label><input type="checkbox" value="-10"> 🎬 nonton lupa waktu</label><br>
+<label><input type="checkbox" value="-15"> 📱 scroll tanpa tujuan</label><br>
+<label><input type="checkbox" value="15"> 💻 lembur</label><br>
+<label><input type="checkbox" value="10"> 🛌 tidur cepat</label><br>
+<label><input type="checkbox" value="-5"> 🤡 overthinking</label>
+</div>
+
+<button onclick="hitung()">➡️ Berikutnya</button>
+
+</div>
+
+<!-- RESULT -->
+<div id="result" class="hidden">
+
+<div class="card">
+<h1 id="score"></h1>
+<p id="roast"></p>
+</div>
+
+<button onclick="share()">🔥 Share</button>
+<button onclick="location.reload()">🔁 Ulang</button>
+
+</div>
+
+</div>
+
 <script>
+
+function start(){
+  document.getElementById("landing").classList.add("hidden");
+  document.getElementById("input").classList.remove("hidden");
+}
+
 function hitung(){
   let total = 0;
 
-  let bangun = document.getElementById("bangun").value;
-  total += parseInt(bangun);
+  total += parseInt(document.getElementById("bangun").value);
 
-  document.querySelectorAll('input[type=checkbox]:checked')
+  document.querySelectorAll('#input input[type=checkbox]:checked')
     .forEach(cb => total += parseInt(cb.value));
 
   if(total < 0) total = 0;
   if(total > 100) total = 100;
 
-  let roast = "";
   let title = "";
+  let roast = "";
 
   if(total < 30){
     title = "NPC MODE 🤡";
@@ -28,10 +156,29 @@ function hitung(){
   }
   else{
     title = "OVERACHIEVER 😤";
-    roast = "Lu kerja beneran… atau lagi kejar validasi?";
+    roast = "Lu kerja beneran… atau cuma cari validasi?";
   }
 
   document.getElementById("score").innerText = total + "% - " + title;
   document.getElementById("roast").innerText = roast;
+
+  document.getElementById("input").classList.add("hidden");
+  document.getElementById("result").classList.remove("hidden");
 }
+
+function share(){
+  let text = document.getElementById("score").innerText + "\n" +
+             document.getElementById("roast").innerText + 
+             "\n\nCoba cek hidup lu juga 😈";
+
+  if(navigator.share){
+    navigator.share({text});
+  } else {
+    alert(text);
+  }
+}
+
 </script>
+
+</body>
+</html>
