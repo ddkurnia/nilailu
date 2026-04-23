@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Seberapa Guna Lu Hari Ini?</title>
 
+<!-- html2canvas -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
 <style>
 body {
   margin:0;
@@ -43,19 +46,17 @@ body::before{
   margin-bottom:15px;
 }
 
-/* Option button */
+/* Option */
 .option{
   padding:12px;
   margin:6px 0;
   border-radius:12px;
   background:white;
   cursor:pointer;
-  transition:0.2s;
 }
 
 .option.active{
   background:#22c55e;
-  color:black;
   font-weight:bold;
 }
 
@@ -70,7 +71,7 @@ button{
   margin-top:10px;
 }
 
-/* Result */
+/* RESULT */
 .result{
   text-align:center;
   font-size:22px;
@@ -81,6 +82,19 @@ button{
   margin-top:10px;
   font-style:italic;
   opacity:0.8;
+}
+
+/* SHARE CARD (khusus gambar) */
+#shareCard{
+  background:linear-gradient(135deg,#facc15,#fde68a);
+  padding:25px;
+  border-radius:20px;
+  text-align:center;
+  color:#111;
+}
+
+#shareCard .result{
+  font-size:28px;
 }
 
 .hidden{display:none;}
@@ -140,10 +154,19 @@ button{
 <!-- RESULT -->
 <div id="result" class="hidden">
 
+<!-- CARD NORMAL -->
 <div class="card">
 <div class="result" id="score"></div>
 <p id="roast"></p>
 <p class="insight" id="insight"></p>
+</div>
+
+<!-- CARD UNTUK GAMBAR -->
+<div id="shareCard" class="hidden">
+<div class="result" id="scoreShare"></div>
+<p id="roastShare"></p>
+<p class="insight" id="insightShare"></p>
+<p style="font-size:12px;opacity:0.6;">coba juga: seberapa guna lu 😈</p>
 </div>
 
 <button onclick="share()">🔥 Share</button>
@@ -155,16 +178,13 @@ button{
 
 <script>
 
-let total = 0;
-
 function start(){
   landing.classList.add("hidden");
   input.classList.remove("hidden");
 }
 
 function select(el,val){
-  let parent = el.parentNode;
-  parent.querySelectorAll(".option").forEach(o=>o.classList.remove("active"));
+  el.parentNode.querySelectorAll(".option").forEach(o=>o.classList.remove("active"));
   el.classList.add("active");
   el.dataset.value = val;
 }
@@ -175,14 +195,13 @@ function toggle(el,val){
 }
 
 function hitung(){
-  total = 0;
+  let total = 0;
 
   document.querySelectorAll(".option.active").forEach(el=>{
     total += parseInt(el.dataset.value || 0);
   });
 
-  if(total < 0) total = 0;
-  if(total > 100) total = 100;
+  total = Math.max(0, Math.min(100,total));
 
   let title="", roast="", insight="";
 
@@ -208,19 +227,41 @@ function hitung(){
   }
 
   score.innerText = total + "% - " + title;
-  document.getElementById("roast").innerText = roast;
-  document.getElementById("insight").innerText = "Kata-kata Hari ini buat lu:\n" + insight;
+  roastEl.innerText = roast;
+  insightEl.innerText = "Hari ini buat lu:\n" + insight;
+
+  // isi share card
+  scoreShare.innerText = total + "% - " + title;
+  roastShare.innerText = roast;
+  insightShare.innerText = "Hari ini buat lu:\n" + insight;
 
   input.classList.add("hidden");
   result.classList.remove("hidden");
 }
 
 function share(){
-  let text = score.innerText + "\n" +
-             roast.innerText + "\n" +
-             insight.innerText;
+  const card = document.getElementById("shareCard");
+  card.classList.remove("hidden");
 
-  navigator.share ? navigator.share({text}) : alert(text);
+  html2canvas(card).then(canvas=>{
+    const img = canvas.toDataURL("image/png");
+
+    const link = document.createElement("a");
+    link.download = "hasil.png";
+    link.href = img;
+    link.click();
+
+    if(navigator.share){
+      fetch(img)
+      .then(res=>res.blob())
+      .then(blob=>{
+        const file = new File([blob],"hasil.png",{type:"image/png"});
+        navigator.share({files:[file]});
+      });
+    }
+
+    card.classList.add("hidden");
+  });
 }
 
 </script>
