@@ -5,48 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Seberapa Guna Lu Hari Ini?</title>
 
-<!-- html2canvas -->
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <style>
-body {
+body{
   margin:0;
-  font-family:'Segoe UI', sans-serif;
+  font-family:'Segoe UI',sans-serif;
   background:linear-gradient(135deg,#fef08a,#fde68a);
-  color:#111;
-  overflow-y:auto;
-}
-
-/* Emoji background */
-body::before{
-  content:"😀 😂 🤡 😭 😤 😵 🤯 😎 😈";
-  position:fixed;
-  font-size:40px;
-  opacity:0.08;
-  width:200%;
-  height:200%;
-  transform:rotate(-15deg);
-  z-index:0;
 }
 
 .container{
   max-width:420px;
   margin:auto;
   padding:20px;
-  position:relative;
-  z-index:2;
 }
 
-/* Glass card */
 .card{
-  background:rgba(255,255,255,0.5);
-  backdrop-filter:blur(15px);
+  background:rgba(255,255,255,0.6);
+  backdrop-filter:blur(10px);
   border-radius:20px;
-  padding:18px;
+  padding:15px;
   margin-bottom:15px;
 }
 
-/* Option */
 .option{
   padding:12px;
   margin:6px 0;
@@ -60,7 +41,6 @@ body::before{
   font-weight:bold;
 }
 
-/* Button */
 button{
   width:100%;
   padding:14px;
@@ -68,10 +48,10 @@ button{
   border-radius:14px;
   background:#22c55e;
   font-weight:bold;
-  margin-top:10px;
 }
 
-/* RESULT */
+.hidden{display:none;}
+
 .result{
   text-align:center;
   font-size:22px;
@@ -79,25 +59,9 @@ button{
 }
 
 .insight{
-  margin-top:10px;
   font-style:italic;
-  opacity:0.8;
+  margin-top:10px;
 }
-
-/* SHARE CARD (khusus gambar) */
-#shareCard{
-  background:linear-gradient(135deg,#facc15,#fde68a);
-  padding:25px;
-  border-radius:20px;
-  text-align:center;
-  color:#111;
-}
-
-#shareCard .result{
-  font-size:28px;
-}
-
-.hidden{display:none;}
 </style>
 </head>
 
@@ -105,68 +69,58 @@ button{
 
 <div class="container">
 
-<!-- LANDING -->
 <div id="landing">
-  <h1>Seberapa Guna Lu Hari Ini? 😈</h1>
-  <p>Jujur aja. Kita nilai hidup lu 🔥</p>
-  <button onclick="start()">Mulai</button>
+<h1>Seberapa Guna Lu Hari Ini 😈</h1>
+<button onclick="start()">Mulai</button>
 </div>
 
-<!-- INPUT -->
 <div id="input" class="hidden">
 
 <div class="card">
-<h3>Lu bangun kapan?</h3>
-<div class="option" onclick="select(this,20)">🌅 Pagi</div>
-<div class="option" onclick="select(this,10)">☀️ Siang</div>
-<div class="option" onclick="select(this,0)">🌙 Malam</div>
+<h3>Bangun kapan?</h3>
+<div class="option" onclick="select(this,20)">Pagi</div>
+<div class="option" onclick="select(this,10)">Siang</div>
+<div class="option" onclick="select(this,0)">Malam</div>
 </div>
 
 <div class="card">
-<h3>🌅 Pagi lu?</h3>
-<div class="option" onclick="toggle(this,5)">☕ ngopi</div>
-<div class="option" onclick="toggle(this,-5)">😴 tidur lagi</div>
-<div class="option" onclick="toggle(this,15)">💻 kerja</div>
-<div class="option" onclick="toggle(this,-10)">📱 scroll</div>
-<div class="option" onclick="toggle(this,10)">🏃 olahraga</div>
+<h3>Pagi</h3>
+<div class="option" onclick="toggle(this,5)">Ngopi</div>
+<div class="option" onclick="toggle(this,-5)">Tidur lagi</div>
+<div class="option" onclick="toggle(this,15)">Kerja</div>
+<div class="option" onclick="toggle(this,-10)">Scroll</div>
 </div>
 
 <div class="card">
-<h3>☀️ Siang?</h3>
-<div class="option" onclick="toggle(this,-5)">🍜 rebahan</div>
-<div class="option" onclick="toggle(this,20)">💻 kerja serius</div>
-<div class="option" onclick="toggle(this,-10)">📱 scroll lagi</div>
-<div class="option" onclick="toggle(this,0)">😵 bingung hidup</div>
+<h3>Siang</h3>
+<div class="option" onclick="toggle(this,-5)">Rebahan</div>
+<div class="option" onclick="toggle(this,20)">Kerja serius</div>
+<div class="option" onclick="toggle(this,-10)">Scroll</div>
 </div>
 
 <div class="card">
-<h3>🌙 Malam?</h3>
-<div class="option" onclick="toggle(this,-10)">🎬 nonton</div>
-<div class="option" onclick="toggle(this,-15)">📱 scroll chaos</div>
-<div class="option" onclick="toggle(this,15)">💻 lembur</div>
-<div class="option" onclick="toggle(this,10)">🛌 tidur cepat</div>
+<h3>Malam</h3>
+<div class="option" onclick="toggle(this,-10)">Nonton</div>
+<div class="option" onclick="toggle(this,-15)">Scroll chaos</div>
+<div class="option" onclick="toggle(this,15)">Lembur</div>
 </div>
 
 <button onclick="hitung()">🔥 Nilai Gue</button>
 
 </div>
 
-<!-- RESULT -->
 <div id="result" class="hidden">
 
-<!-- CARD NORMAL -->
 <div class="card">
-<div class="result" id="score"></div>
+<div id="score" class="result"></div>
 <p id="roast"></p>
-<p class="insight" id="insight"></p>
+<p id="insight" class="insight"></p>
 </div>
 
-<!-- CARD UNTUK GAMBAR -->
-<div id="shareCard" class="hidden">
-<div class="result" id="scoreShare"></div>
+<div id="shareCard" class="card hidden">
+<div id="scoreShare" class="result"></div>
 <p id="roastShare"></p>
-<p class="insight" id="insightShare"></p>
-<p style="font-size:12px;opacity:0.6;">coba juga: seberapa guna lu 😈</p>
+<p id="insightShare"></p>
 </div>
 
 <button onclick="share()">🔥 Share</button>
@@ -179,8 +133,8 @@ button{
 <script>
 
 function start(){
-  landing.classList.add("hidden");
-  input.classList.remove("hidden");
+  document.getElementById("landing").classList.add("hidden");
+  document.getElementById("input").classList.remove("hidden");
 }
 
 function select(el,val){
@@ -206,37 +160,33 @@ function hitung(){
   let title="", roast="", insight="";
 
   if(total < 30){
-    title="NPC MODE 🤡";
-    roast="Seharian hidup… tapi kosong 😭";
-    insight="Kalau besok sama aja, lu lagi hidup atau cuma lewat?";
-  }
-  else if(total < 60){
+    title="NPC 🤡";
+    roast="Hidup... tapi kosong";
+    insight="Lu jalan… tapi ke mana?";
+  } else if(total < 60){
     title="SIBUK HALU 😵";
-    roast="Gerak banyak, hasil nihil.";
-    insight="Lu capek… tapi maju nggak?";
-  }
-  else if(total < 80){
+    roast="Gerak banyak, hasil dikit";
+    insight="Capek doang atau beneran maju?";
+  } else if(total < 80){
     title="MASIH MANUSIA 🧍";
-    roast="Lumayan lah… nggak malu.";
-    insight="Udah oke… tapi masih bisa lebih.";
-  }
-  else{
+    roast="Lumayan lah";
+    insight="Udah oke, tapi jangan santai";
+  } else {
     title="OVERACHIEVER 😤";
-    roast="Lu kerja… atau kabur dari realita?";
-    insight="Produktif tanpa arah = capek doang.";
+    roast="Lu kerja keras";
+    insight="Arah lu jelas nggak?";
   }
 
-  score.innerText = total + "% - " + title;
-  roastEl.innerText = roast;
-  insightEl.innerText = "Hari ini buat lu:\n" + insight;
+  document.getElementById("score").innerText = total+"% - "+title;
+  document.getElementById("roast").innerText = roast;
+  document.getElementById("insight").innerText = "Hari ini buat lu:\n"+insight;
 
-  // isi share card
-  scoreShare.innerText = total + "% - " + title;
-  roastShare.innerText = roast;
-  insightShare.innerText = "Hari ini buat lu:\n" + insight;
+  document.getElementById("scoreShare").innerText = total+"% - "+title;
+  document.getElementById("roastShare").innerText = roast;
+  document.getElementById("insightShare").innerText = insight;
 
-  input.classList.add("hidden");
-  result.classList.remove("hidden");
+  document.getElementById("input").classList.add("hidden");
+  document.getElementById("result").classList.remove("hidden");
 }
 
 function share(){
@@ -244,21 +194,12 @@ function share(){
   card.classList.remove("hidden");
 
   html2canvas(card).then(canvas=>{
-    const img = canvas.toDataURL("image/png");
+    const img = canvas.toDataURL();
 
     const link = document.createElement("a");
-    link.download = "hasil.png";
-    link.href = img;
+    link.download="hasil.png";
+    link.href=img;
     link.click();
-
-    if(navigator.share){
-      fetch(img)
-      .then(res=>res.blob())
-      .then(blob=>{
-        const file = new File([blob],"hasil.png",{type:"image/png"});
-        navigator.share({files:[file]});
-      });
-    }
 
     card.classList.add("hidden");
   });
