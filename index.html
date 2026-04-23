@@ -8,88 +8,82 @@
 <style>
 body {
   margin:0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #fef9c3, #fde68a);
+  font-family:'Segoe UI', sans-serif;
+  background:linear-gradient(135deg,#fef08a,#fde68a);
   color:#111;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  overflow:hidden;
+  overflow-y:auto;
 }
 
-/* Emoji Background */
-body::before {
-  content:"😀 😭 🤡 😵 😤 😂 🤯 😎 🫠 😈";
-  position:absolute;
+/* Emoji background */
+body::before{
+  content:"😀 😂 🤡 😭 😤 😵 🤯 😎 😈";
+  position:fixed;
   font-size:40px;
   opacity:0.08;
   width:200%;
   height:200%;
-  line-height:60px;
   transform:rotate(-15deg);
+  z-index:0;
 }
 
-.container {
-  width:90%;
+.container{
   max-width:420px;
-  text-align:center;
+  margin:auto;
+  padding:20px;
+  position:relative;
   z-index:2;
 }
 
-/* Glass Card */
-.card {
-  background: rgba(255,255,255,0.4);
-  backdrop-filter: blur(15px);
-  padding:20px;
+/* Glass card */
+.card{
+  background:rgba(255,255,255,0.5);
+  backdrop-filter:blur(15px);
   border-radius:20px;
-  margin-top:15px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+  padding:18px;
+  margin-bottom:15px;
 }
 
-h1 {
-  font-size:26px;
+/* Option button */
+.option{
+  padding:12px;
+  margin:6px 0;
+  border-radius:12px;
+  background:white;
+  cursor:pointer;
+  transition:0.2s;
 }
 
-p {
-  opacity:0.8;
-}
-
-/* Buttons */
-button {
-  padding:14px;
-  margin-top:15px;
-  border:none;
-  border-radius:14px;
-  background: linear-gradient(135deg,#22c55e,#4ade80);
+.option.active{
+  background:#22c55e;
   color:black;
   font-weight:bold;
+}
+
+/* Button */
+button{
   width:100%;
-  font-size:16px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.15);
+  padding:14px;
+  border:none;
+  border-radius:14px;
+  background:#22c55e;
+  font-weight:bold;
+  margin-top:10px;
 }
 
-button:active {
-  transform:scale(0.97);
-}
-
-/* Inputs */
-select, input[type=checkbox] {
-  margin:6px;
-}
-
-.hidden { display:none; }
-
-.result-box {
+/* Result */
+.result{
+  text-align:center;
   font-size:22px;
   font-weight:bold;
 }
 
-.insight {
+.insight{
   margin-top:10px;
   font-style:italic;
   opacity:0.8;
 }
+
+.hidden{display:none;}
 </style>
 </head>
 
@@ -100,7 +94,7 @@ select, input[type=checkbox] {
 <!-- LANDING -->
 <div id="landing">
   <h1>Seberapa Guna Lu Hari Ini? 😈</h1>
-  <p>Jawab jujur… kita nilai hidup lu 🔥</p>
+  <p>Jujur aja. Kita nilai hidup lu 🔥</p>
   <button onclick="start()">Mulai</button>
 </div>
 
@@ -108,42 +102,38 @@ select, input[type=checkbox] {
 <div id="input" class="hidden">
 
 <div class="card">
-<p>Lu bangun kapan?</p>
-<select id="bangun">
-  <option value="20">🌅 Pagi (niat hidup)</option>
-  <option value="10">☀️ Siang (ya gitu lah)</option>
-  <option value="0">🌙 Malam (fix kacau)</option>
-</select>
+<h3>Lu bangun kapan?</h3>
+<div class="option" onclick="select(this,20)">🌅 Pagi</div>
+<div class="option" onclick="select(this,10)">☀️ Siang</div>
+<div class="option" onclick="select(this,0)">🌙 Malam</div>
 </div>
 
 <div class="card">
-<p>🌅 Pagi lu ngapain?</p>
-<label><input type="checkbox" value="5"> ☕ ngopi doang</label><br>
-<label><input type="checkbox" value="-5"> 😴 lanjut tidur</label><br>
-<label><input type="checkbox" value="15"> 💻 kerja bentar</label><br>
-<label><input type="checkbox" value="-10"> 📱 scroll</label><br>
-<label><input type="checkbox" value="10"> 🏃 sok olahraga</label>
+<h3>🌅 Pagi lu?</h3>
+<div class="option" onclick="toggle(this,5)">☕ ngopi</div>
+<div class="option" onclick="toggle(this,-5)">😴 tidur lagi</div>
+<div class="option" onclick="toggle(this,15)">💻 kerja</div>
+<div class="option" onclick="toggle(this,-10)">📱 scroll</div>
+<div class="option" onclick="toggle(this,10)">🏃 olahraga</div>
 </div>
 
 <div class="card">
-<p>☀️ Siang?</p>
-<label><input type="checkbox" value="-5"> 🍜 makan + rebahan</label><br>
-<label><input type="checkbox" value="20"> 💻 kerja serius</label><br>
-<label><input type="checkbox" value="-10"> 📱 scroll lagi</label><br>
-<label><input type="checkbox" value="0"> 😵 bingung hidup</label><br>
-<label><input type="checkbox" value="-5"> 🧠 pura-pura sibuk</label>
+<h3>☀️ Siang?</h3>
+<div class="option" onclick="toggle(this,-5)">🍜 rebahan</div>
+<div class="option" onclick="toggle(this,20)">💻 kerja serius</div>
+<div class="option" onclick="toggle(this,-10)">📱 scroll lagi</div>
+<div class="option" onclick="toggle(this,0)">😵 bingung hidup</div>
 </div>
 
 <div class="card">
-<p>🌙 Malam?</p>
-<label><input type="checkbox" value="-10"> 🎬 nonton lupa waktu</label><br>
-<label><input type="checkbox" value="-15"> 📱 scroll tanpa tujuan</label><br>
-<label><input type="checkbox" value="15"> 💻 lembur</label><br>
-<label><input type="checkbox" value="10"> 🛌 tidur cepat</label><br>
-<label><input type="checkbox" value="-5"> 🤡 overthinking</label>
+<h3>🌙 Malam?</h3>
+<div class="option" onclick="toggle(this,-10)">🎬 nonton</div>
+<div class="option" onclick="toggle(this,-15)">📱 scroll chaos</div>
+<div class="option" onclick="toggle(this,15)">💻 lembur</div>
+<div class="option" onclick="toggle(this,10)">🛌 tidur cepat</div>
 </div>
 
-<button onclick="hitung()">➡️ Berikutnya</button>
+<button onclick="hitung()">🔥 Nilai Gue</button>
 
 </div>
 
@@ -151,7 +141,7 @@ select, input[type=checkbox] {
 <div id="result" class="hidden">
 
 <div class="card">
-<div class="result-box" id="score"></div>
+<div class="result" id="score"></div>
 <p id="roast"></p>
 <p class="insight" id="insight"></p>
 </div>
@@ -165,53 +155,61 @@ select, input[type=checkbox] {
 
 <script>
 
+let total = 0;
+
 function start(){
   landing.classList.add("hidden");
   input.classList.remove("hidden");
 }
 
+function select(el,val){
+  let parent = el.parentNode;
+  parent.querySelectorAll(".option").forEach(o=>o.classList.remove("active"));
+  el.classList.add("active");
+  el.dataset.value = val;
+}
+
+function toggle(el,val){
+  el.classList.toggle("active");
+  el.dataset.value = val;
+}
+
 function hitung(){
-  let total = 0;
+  total = 0;
 
-  total += parseInt(bangun.value);
-
-  document.querySelectorAll('#input input[type=checkbox]:checked')
-    .forEach(cb => total += parseInt(cb.value));
+  document.querySelectorAll(".option.active").forEach(el=>{
+    total += parseInt(el.dataset.value || 0);
+  });
 
   if(total < 0) total = 0;
   if(total > 100) total = 100;
 
-  let title = "";
-  let roast = "";
-  let insight = "";
+  let title="", roast="", insight="";
 
   if(total < 30){
-    title = "NPC MODE 🤡";
-    roast = "Seharian hidup… tapi kayak nggak ada tujuan 😭";
-    insight = "Kalau hari lu diulang lagi besok, hidup lu bakal beda nggak?";
+    title="NPC MODE 🤡";
+    roast="Seharian hidup… tapi kosong 😭";
+    insight="Kalau besok sama aja, lu lagi hidup atau cuma lewat?";
   }
   else if(total < 60){
-    title = "SIBUK HALU 😵";
-    roast = "Gerak banyak, hasil minim. Klasik.";
-    insight = "Sibuk itu bukan bukti maju. Kadang cuma bukti lu lari dari fokus.";
+    title="SIBUK HALU 😵";
+    roast="Gerak banyak, hasil nihil.";
+    insight="Lu capek… tapi maju nggak?";
   }
   else if(total < 80){
-    title = "MASIH MANUSIA 🧍";
-    roast = "Lumayan… nggak malu-maluin banget hari ini.";
-    insight = "Lu udah di jalan yang bener… tapi jangan santai dulu.";
+    title="MASIH MANUSIA 🧍";
+    roast="Lumayan lah… nggak malu.";
+    insight="Udah oke… tapi masih bisa lebih.";
   }
   else{
-    title = "OVERACHIEVER 😤";
-    roast = "Lu kerja beneran… atau cuma cari validasi?";
-    insight = "Produktif tanpa arah cuma bikin capek, bukan maju.";
+    title="OVERACHIEVER 😤";
+    roast="Lu kerja… atau kabur dari realita?";
+    insight="Produktif tanpa arah = capek doang.";
   }
 
   score.innerText = total + "% - " + title;
-  roastEl = document.getElementById("roast");
-  roastEl.innerText = roast;
-
-  insightEl = document.getElementById("insight");
-  insightEl.innerText = "Hari ini buat lu:\n" + insight;
+  document.getElementById("roast").innerText = roast;
+  document.getElementById("insight").innerText = "Hari ini buat lu:\n" + insight;
 
   input.classList.add("hidden");
   result.classList.remove("hidden");
@@ -220,14 +218,9 @@ function hitung(){
 function share(){
   let text = score.innerText + "\n" +
              roast.innerText + "\n" +
-             insight.innerText +
-             "\n\nCoba cek hidup lu juga 😈";
+             insight.innerText;
 
-  if(navigator.share){
-    navigator.share({text});
-  } else {
-    alert(text);
-  }
+  navigator.share ? navigator.share({text}) : alert(text);
 }
 
 </script>
